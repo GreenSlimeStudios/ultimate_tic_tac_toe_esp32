@@ -145,17 +145,17 @@ Square check_game(std::vector<Square> v)
   return DRAW;
 }
 
-void draw_symbol(Square whos, int x, int y)
+void draw_symbol(Square whos, int x, int y,bool is_verdict)
 {
   // display.drawCircle(x + SCREEN_WIDTH / 28 / 2, y + SCREEN_HEIGHT / 28 / 2, 3, ST77XX_WHITE);
   if (whos == P1)
   {
-    display.drawCircle(x, y, 5, ST77XX_WHITE);
+    display.drawCircle(x, y, 5,(!is_verdict)?ST77XX_RED:ST77XX_WHITE);
   }
   if (whos == P2)
   {
-    display.drawLine(x - 3, y - 3, x + 3, y + 3, ST77XX_WHITE);
-    display.drawLine(x - 3, y + 3, x + 3, y - 3, ST77XX_WHITE);
+    display.drawLine(x - 4, y - 4, x + 4, y + 4, (!is_verdict)?ST77XX_BLUE:ST77XX_WHITE);
+    display.drawLine(x - 4, y + 4, x + 4, y - 4, (!is_verdict)?ST77XX_BLUE:ST77XX_WHITE);
   }
   // display.drawPixel(x,y,ST77XX_CYAN);
 }
@@ -181,7 +181,7 @@ void print_helper()
   display.drawRoundRect(segment + 8 * segment * w, segment + 8 * segment * h, 6 * segment + 1, 6 * segment + 1, 5, ST77XX_ORANGE);
 }
 
-void print_small_board(int i, int j)
+void print_small_board(int i, int j,bool is_verdict)
 {
   display.drawLine(segment * 1 + segment * i * 8, segment_h * 3 + segment_h * j * 8, segment * 7 + segment * i * 8, segment_h * 3 + segment_h * j * 8, ST77XX_WHITE);
   display.drawLine(segment * 1 + segment * i * 8, segment_h * 5 + segment_h * j * 8, segment * 7 + segment * i * 8, segment_h * 5 + segment_h * j * 8, ST77XX_WHITE);
@@ -191,7 +191,7 @@ void print_small_board(int i, int j)
   {
     for (int w = 0; w < 3; ++w)
     {
-      draw_symbol(gs.board[i * 3 + j][h * 3 + w], SCREEN_WIDTH / PART_STEP + SCREEN_WIDTH / PART_STEP * j * 8 + SCREEN_WIDTH / PART_STEP * w * 2 + SCREEN_WIDTH / PART_STEP, segment_h + segment_h * i * 8 + segment_h * h * 2 + segment_h);
+      draw_symbol(gs.board[i * 3 + j][h * 3 + w], SCREEN_WIDTH / PART_STEP + SCREEN_WIDTH / PART_STEP * j * 8 + SCREEN_WIDTH / PART_STEP * w * 2 + SCREEN_WIDTH / PART_STEP, segment_h + segment_h * i * 8 + segment_h * h * 2 + segment_h,is_verdict);
     }
   }
 }
@@ -230,15 +230,20 @@ void print_board()
       {
       case P1:
         display.fillRoundRect(segment + 8 * segment * i, segment + 8 * segment * j, 6 * segment + 1, 6 * segment + 1, 5, ST77XX_RED);
-        print_small_board(i, j);
+        print_small_board(j, i,true);
         break;
       case P2:
         display.fillRoundRect(segment + 8 * segment * i, segment + 8 * segment * j, 6 * segment + 1, 6 * segment + 1, 5, ST77XX_BLUE);
-        print_small_board(i, j);
+        print_small_board(j, i,true);
         break;
+      case DRAW:
+        display.fillRoundRect(segment + 8 * segment * i, segment + 8 * segment * j, 6 * segment + 1, 6 * segment + 1, 5, ST77XX_CASET);
+        print_small_board(j, i,true);
+
+      break;
 
       default:
-        print_small_board(i, j);
+        print_small_board(j, i,false);
         break;
       }
     }
@@ -263,7 +268,7 @@ void end_game(Square state)
   else
   {
     // display.fillScreen(ST77XX_BLACK);
-    display.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT / 6, ST77XX_MAGENTA);
+    display.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT / 6, ST77XX_CASET);
     display.setTextColor(ST77XX_WHITE);
     display.println("draw >:[");
   }
