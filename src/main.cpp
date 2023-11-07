@@ -183,8 +183,8 @@ void print_helper()
 
 void print_small_board(int i, int j,bool is_verdict)
 {
-  display.drawLine(segment * 1 + segment * i * 8, segment_h * 3 + segment_h * j * 8, segment * 7 + segment * i * 8, segment_h * 3 + segment_h * j * 8, ST77XX_WHITE);
-  display.drawLine(segment * 1 + segment * i * 8, segment_h * 5 + segment_h * j * 8, segment * 7 + segment * i * 8, segment_h * 5 + segment_h * j * 8, ST77XX_WHITE);
+  display.drawLine(segment * 1 + segment * j * 8, segment_h * 3 + segment_h * i * 8, segment * 7 + segment * j * 8, segment_h * 3 + segment_h * i * 8, ST77XX_WHITE);
+  display.drawLine(segment * 1 + segment * j * 8, segment_h * 5 + segment_h * i * 8, segment * 7 + segment * j * 8, segment_h * 5 + segment_h * i * 8, ST77XX_WHITE);
   display.drawLine(segment * 3 + segment * j * 8, segment_h * 1 + segment_h * i * 8, segment * 3 + segment * j * 8, segment_h * 7 + segment_h * i * 8, ST77XX_WHITE);
   display.drawLine(segment * 5 + segment * j * 8, segment_h * 1 + segment_h * i * 8, segment * 5 + segment * j * 8, segment_h * 7 + segment_h * i * 8, ST77XX_WHITE);
   for (int h = 0; h < 3; ++h)
@@ -252,6 +252,7 @@ void print_board()
 
 void end_game(Square state)
 {
+  display.setCursor(5,5);
   if (state == P1)
   {
     display.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT / 6, ST77XX_RED);
